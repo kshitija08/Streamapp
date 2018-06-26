@@ -1,0 +1,108 @@
+{% extends 'Streamapp/base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+{% block style %}
+{% endblock %}
+{% block content %}
+ <div class="ui middle aligned center aligned grid">
+  <div class="six wide column ui piled segment">
+	<div class="ui center aligned grid">
+	        		  {% if  form.non_field_errors %}
+	        		        <div class="ui icon warning message">
+         						<i class="lock icon"></i>
+            					<div class="content">
+            						<div class="header">
+              							Signup failed!
+           							</div>
+            						<p>{{form.non_field_errors}}</p>
+          						</div>
+        					</div>
+           			 	 <div class="ui negative visible message">
+						
+      					</div>
+      				{% else %}	
+	  				<div class="ui large header">
+	  					Create Stream Account
+	  				</div>
+	  				{% endif %}
+	  				<div class="ui hidden divider"></div>
+	  					  <form method="post" class="ui large left aligned form">
+						    {% csrf_token %}
+						    <div class="field">
+						    	<label>Username</label>
+        		  				<div class="ui left icon input">
+            						<i class="user icon"></i>
+            						<input type="text" name="{{ form.username.html_name }}" id="{{form.username.id_for_label}}" placeholder="username">
+            					</div>
+            					{% if  form.username.errors %}
+            						<div class="ui negative visible message">
+								{{form.username.errors}}
+      								</div>	
+      							{% endif %}
+        					</div>
+						    <div class="two fields">
+						    	<div class="field">
+						    	<label>First Name</label>
+            						<input type="text" name="{{ form.first_name.html_name }}" id="{{form.first_name.id_for_label}}" placeholder="First name">
+            					{% if  form.first_name.errors %}
+            						<div class="ui negative visible message">
+								{{form.first_name.errors}}
+      								</div>
+      							{% endif %}
+      							</div>
+      							<div class="field">
+      							<label>Last Name</label>
+            						<input type="text" name="{{ form.last_name.html_name }}" id="{{form.last_name.id_for_label}}" placeholder="Last name">
+            					{% if  form.last_name.errors %}
+            						<div class="ui negative visible message">
+								{{form.last_name.errors}}
+      								</div>
+      							{% endif %}
+      						</div>
+        					</div>
+						    <div class="field">
+						    	<label>Email Address</label>
+        		  				<div class="ui left icon input">
+            						<i class="user icon"></i>
+            						<input type="text" name="{{ form.email.html_name }}" id="{{form.email.id_for_label}}" placeholder="Email Address">
+            					</div>
+            					{% if  form.email.errors %}
+            						<div class="ui negative visible message">
+								{{form.email.errors}}
+      								</div>
+      							{% endif %}
+        					</div>
+						    <div class="field">
+						    	<label>Password</label>
+        		  				<div class="ui left icon input">
+            						<i class="lock icon"></i>
+            						<input type="Password" name="{{ form.password1.html_name }}" id="{{form.password1.id_for_label}}" placeholder="Password">
+            					</div>
+            					{% if  form.password1.errors %}
+            						<div class="ui negative visible message">
+								{{form.password1.errors}}
+      								</div>
+      							{% endif %}
+        					</div>
+						    <div class="field">
+						    	<label> Confirm Password</label>
+        		  				<div class="ui left icon input">
+            						<i class="lock icon"></i>
+            						<input type="Password" name="{{ form.password2.html_name }}" id="{{form.password2.id_for_label}}" placeholder="Confirm Password">
+            					</div>
+            					{% if  form.password2.errors %}
+            						<div class="ui negative visible message">
+								{{form.password2.errors}}
+      								</div>
+      							{% endif %}
+        					</div>
+					        <button type="submit" class="ui fluid large teal submit button">Sign up</button>
+						  </form>
+
+    <div class="ui message">
+      Already registered? <a href="{% url 'login' %}">Login</a>
+    </div>						  
+	  			</div>
+	  		</div>
+	  	</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Django Auth Tutorial{% endblock %}</title>
+  {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'semantic/dist/semantic.min.css' %}">
+	{% block style %}
+	{% endblock %}
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

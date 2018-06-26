@@ -1,0 +1,62 @@
+{% extends 'Streamapp/base.html' %}
+  {% load static %}
+{% block title %}Login{% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'Streamapp/login.css' %}">
+{% endblock %}
+{% block content %}
+
+ <div class="ui middle aligned center aligned grid">
+  <div class="five wide column ui raised card">
+    <h2 class="ui header">
+      <div class="content">
+        Log-in to your account
+      </div>
+    </h2>
+    <form method="POST" class="ui large form">
+    	{% csrf_token %}
+      <div class="ui stacked secondary  segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="{{ form.username.html_name }}" id="{{form.username.id_for_label}}" placeholder="username">
+          </div>
+          {% if  form.username.errors %}
+            <div class="ui negative visible message">
+				{{form.username.errors}}
+      		</div>
+      	{% endif %}
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="{{ form.password.html_name }}"  id="{{form.username.id_for_label}}" placeholder="Password">
+          </div>
+          {% if  form.password.errors %}
+            <div class="ui negative visible message">
+				{{form.password.errors}}
+      		</div>
+      	{% endif %}
+
+        </div>
+        <button type="submit" class="ui fluid large teal submit button">Login</button>
+      </div>
+          {% if  form.non_field_errors %}
+            <div class="ui negative visible message">
+				{{form.non_field_errors}}
+      		</div>
+      	{% endif %}
+    </form>
+
+    <div class="ui message">
+      New to us? <a href="{% url 'signup' %}">Register</a>
+    </div>
+  </div>
+</div>
+<!-- <h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+</form> -->
+{% endblock %}
