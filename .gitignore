@@ -1,3 +1,24 @@
 db.sqlite3
 stream-frontend/node_modules
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+stream-frontend/node_modules
+
+# testing
+stream-frontend/coverage
+
+# production
+stream-frontend/build
+
+# misc
+stream-frontend/.DS_Store
+stream-frontend/.env.local
+stream-frontend/.env.development.local
+stream-frontend/.env.test.local
+stream-frontend/.env.production.local
+
+stream-frontend/npm-debug.log*
+stream-frontend/yarn-debug.log*
+stream-frontend/yarn-error.log*
 

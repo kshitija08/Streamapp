@@ -1,5 +1,6 @@
 import Signupform from './signupform'
 import {  Link } from 'react-router-dom';
+import 'semantic-ui-css/semantic.min.css';
 var React = require('react')
 var  axios  =require('axios');
 class Signup extends React.Component{

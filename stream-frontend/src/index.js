@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import login from './login'
 import home from './home'
 import signup from './signup'
+import 'semantic-ui-css/semantic.min.css';
 
 render(
     <Router>

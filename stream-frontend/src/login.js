@@ -1,4 +1,5 @@
 import Loginform from './loginform'
+import 'semantic-ui-css/semantic.min.css';
 var  axios  =require('axios');
 var React = require('react')
 class login extends React.Component{
