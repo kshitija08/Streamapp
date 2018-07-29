@@ -22,3 +22,8 @@ stream-frontend/npm-debug.log*
 stream-frontend/yarn-debug.log*
 stream-frontend/yarn-error.log*
 
+stream-frontend/src/config.js
+Streamapp/__pycache__
+Streamapp/migrations/__pycache__
+Stream/__pycache__
+.vscode

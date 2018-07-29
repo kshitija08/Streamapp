@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/', auth_views.login, {'template_name': 'Streamapp/login.html'}, name='login'),
     path('obtain-auth-token/', obtain_auth_token),
     path('register/' , views.sign_up.as_view() , name='register'),
+    path('play/', views.play , name='play'),
 ]

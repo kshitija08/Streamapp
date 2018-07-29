@@ -34,3 +34,5 @@ class sign_up(generics.ListCreateAPIView):
 	serializer_class = 	UserSerializer
 	def perform_create(self, serializer):
 		serializer.save()
+def play(request):
+    return render(request , 'Streamapp/play.html' , {})
