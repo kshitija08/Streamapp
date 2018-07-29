@@ -1,16 +1,12 @@
 import { Redirect } from 'react-router'
 import Searchbar from "./searchbar"
 import { Grid } from 'semantic-ui-react'
-import { apikey } from "./config"
+import { apikey, streamSocket } from "./config"
+import Navbar from "./navbar"
+import LeftMenu from "./left"
+import { serverurl } from "./config"
+var axios = require('axios');
 var React = require('react')
-var axios = require('axios')
-class Logout extends React.Component {
-	render() {
-		return (
-			<button onClick={this.props.logout}>Logout</button>
-		)
-	}
-}
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
@@ -37,6 +33,41 @@ class Home extends React.Component {
 			});
 		};
 	}
+	componentDidMount() {
+		streamSocket.onmessage = (e) => {
+			let data = JSON.parse(e.data);
+		}
+		// this.interval = setInterval(()=>{
+		// 	var data = {
+		// 		url: this.state.video,
+		// 		play: this.player,
+		// 		mute: '',
+		// 		duration: '',
+		// 		seek: '',
+		// 		volume: '',
+		// 		isStop: false
+
+		// 	};
+		// 	data.mute =this.player.isMuted();
+		// 	data.duration =this.player.getDuration();
+		// 	data.seek = this.player.getCurrentTime()
+		// 	data.volume =this.player.getVolume();
+		// 	if(this.player.getPlayerState() == 0 || this.player.getPlayerState() == -1 || this.player.getPlayerState() == 5){
+		// 		data.isStop =true;
+		// 		data.play =false;
+		// 	}
+		// 	else if(this.player.getPlayerState()== 2 || this.player.getPlayerState() == 3){
+		// 		data.play = false;
+		// 		data.isStop =false;
+		// 	}
+		// 	else if(this.player.getPlayerState()== 1){
+		// 		data.play = true;
+		// 		data.isStop =false;
+		// 	}
+		// 	streamSocket.send(JSON.stringify(data));
+
+		// }, 1000);
+	}
 	logout = () => {
 		delete localStorage.token
 		this.setState({ token: localStorage.token });
@@ -52,6 +83,9 @@ class Home extends React.Component {
 				key: apikey,
 				q: this.state.searchbar_value,
 				maxResults: MAX_RESULTS,
+				type: 'video',
+				videoCategoryId: '10',
+				order: 'viewCount'
 			}
 		})
 			.then((response) => {
@@ -91,28 +125,41 @@ class Home extends React.Component {
 		this.player.loadVideoById(result.video,
 			0,
 			'small')
+		let data = {
+			url: result.video,
+			play: true,
+			mute: false,
+			duration: 0,
+			seek: 0,
+			volume: 70,
+			isStop: false
+
+		};
+		streamSocket.send(JSON.stringify(data));
 	}
 	render() {
 		if (this.state.token) {
 			return (
-				<Grid columns={3} divided>
+				<Grid columns={3}>
 					<Grid.Row columns={1} >
 						<Grid.Column>
-							<Logout logout={this.logout} />
+							<Navbar logout={this.logout} />
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row>
 						<Grid.Column mobile={16} tablet={16} largeScreen={4}>
+							<LeftMenu />
 						</Grid.Column>
-						<Grid.Column mobile={16} tablet={16} largeScreen={12}>
+						<Grid.Column mobile={16} tablet={16} largeScreen={8}>
 							<Searchbar isLoading={this.state.isLoading} searchbar={this.state.searchbar_value} results={this.state.results} handleChange={this.handleChange} handleResultSelect={this.handleResultSelect} resetComponent={this.resetComponent} />
-							<Grid.Row columns={2}>
+							<Grid.Row columns={1}>
 								<Grid.Column mobile={8} tablet={8} largeScreen={8}>
 									<div id="player">
 									</div>
 								</Grid.Column>
 							</Grid.Row>
-
+						</Grid.Column>
+						<Grid.Column mobile={16} tablet={16} largeScreen={4}>
 						</Grid.Column>
 
 
@@ -134,24 +181,38 @@ class Home extends React.Component {
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	}
 	onPlayerStateChange(event) {
-		console.log(event)
+		let data = {
+			url: this.state.video,
+			play: '',
+			mute: '',
+			isStop: '',
+			duration: this.player.getDuration(),
+			seek: '',
+			volume: '',
+		};
 		switch (event.data) {
 			case window['YT'].PlayerState.PLAYING:
-				if (this.cleanTime() === 0) {
-					console.log('started ' + this.cleanTime());
-				} else {
-					console.log('playing ' + this.cleanTime())
-				};
+				data.play = true;
+				data.seek = this.player.getCurrentTime();
+				data.isStop = false;
 				break;
 			case window['YT'].PlayerState.PAUSED:
 				if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
-					console.log('paused' + ' @ ' + this.cleanTime());
+					data.play = false;
+					data.seek = this.player.getCurrentTime();
+					data.isStop = false;
 				};
 				break;
 			case window['YT'].PlayerState.ENDED:
-				console.log('ended ');
+				data.play = false;
+				data.seek = this.player.getCurrentTime();
+				data.isStop = true;
 				break;
 		};
+		data.mute = this.player.isMuted();
+		data.seek = this.player.getCurrentTime();
+		data.volume = this.player.getVolume();
+		streamSocket.send(JSON.stringify(data));
 	};
 	//utility
 	cleanTime() {
@@ -160,7 +221,6 @@ class Home extends React.Component {
 	onPlayerError(event) {
 		switch (event.data) {
 			case 2:
-				console.log('' + this.state.video)
 				break;
 			case 100:
 				break;

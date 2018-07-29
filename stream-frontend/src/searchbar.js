@@ -11,7 +11,7 @@ export default class search_bar extends Component {
     return (
       <Grid>
         <Grid.Column width={12}>
-          <Search fluid size='large'
+          <Search fluid size='large' placeholder="Search on youtube!"
             loading={this.props.isLoading}
             onResultSelect={this.props.handleResultSelect}
             onSearchChange={this.props.handleChange}

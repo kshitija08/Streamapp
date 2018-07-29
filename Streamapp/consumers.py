@@ -1,17 +1,59 @@
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 
-class PlayConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+class PlayConsumer(AsyncWebsocketConsumer):
+	async def connect(self):
 
-    def disconnect(self, close_code):
-        pass
+		await self.channel_layer.group_add(
+			"stream",
+			self.channel_name			
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+		)
+		await self.accept()
 
-        self.send(text_data=json.dumps({
-            'message': message
-        }))
+	async def disconnect(self, close_code):
+		await self.channel_layer.group_discard(
+			"stream",
+			self.channel_name
+		)
+
+	async def receive(self, text_data):
+		text_data_json = json.loads(text_data)
+		url = text_data_json['url']
+		play = text_data_json['play']
+		mute = text_data_json['mute']
+		duration = text_data_json['duration']
+		seek = text_data_json['seek']
+		volume = text_data_json['volume']
+		isStop = text_data_json['isStop']
+		await self.channel_layer.group_send(
+			"stream",
+			{
+				'type': 'web_stream',
+				'url': url,
+				'play': play,
+				'mute': mute,
+				'duration': duration,
+				'seek': seek,
+				'volume': volume,
+                'isStop' : isStop
+			}
+		)
+
+	async def web_stream(self, event):
+		url = event['url']
+		play = event['play']
+		mute = event['mute']
+		duration = event['duration']
+		seek = event['seek']
+		volume = event['volume']
+		isStop = event['isStop']
+		await self.send(text_data=json.dumps({
+				'url': url,
+				'play': play,
+				'mute': mute,
+				'duration': duration,
+				'seek': seek,
+				'volume': volume,
+                'isStop' : isStop,
+}))

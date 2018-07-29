@@ -19,17 +19,7 @@ class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'Streamapp/signup.html'
-
-class UserViewVSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
-    def retrieve(self, request, pk=None):
-        if pk == 'i':
-            return Response(UserSerializer(request.user,
-                context={'request':request}).data)
-        return super(UserViewSet, self).retrieve(request, pk)
-class sign_up(generics.ListCreateAPIView):
+class sign_up(generics.CreateAPIView):
 	queryset = CustomUser.objects.all()
 	serializer_class = 	UserSerializer
 	def perform_create(self, serializer):
