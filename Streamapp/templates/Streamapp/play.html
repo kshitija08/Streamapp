@@ -51,6 +51,7 @@
     chatSocket.onmessage = function (e) {
         var data = JSON.parse(e.data);
         var uri = player.getVideoUrl();
+        console.log(data)
         uri = uri.split("v=");
         if (uri[1].substr(0, 13) != data.url) {
             player.loadVideoById({

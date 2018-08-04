@@ -33,10 +33,27 @@ class Home extends React.Component {
 			});
 		};
 	}
+    getUser = () => {
+		let url = serverurl + '/streamapp/api/token';
+		axios({
+			method:'post',
+			url:url,
+			headers:{Authorization: "Token 142bbdddc6823fef1866c774eb078953c0f71949"},
+			data: {
+				key: "142bbdddc6823fef1866c774eb078953c0f71949",
+			}
+		}).then((response) => {
+				console.log(response)
+            })
+            .catch((error) => {
+				console.log(error.response)
+            });
+    }
 	componentDidMount() {
 		streamSocket.onmessage = (e) => {
 			let data = JSON.parse(e.data);
 		}
+		this.getUser()
 		// this.interval = setInterval(()=>{
 		// 	var data = {
 		// 		url: this.state.video,

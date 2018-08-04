@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password as vp
 from .models import CustomUser
+from rest_framework.authtoken.models import Token
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
             required=False,
@@ -25,3 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ( 'username', 'email', 'password' , 'first_name', 'last_name')
+class tokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = '__all__'
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'id' , 'first_name' , 'last_name' , 'is_staff' ,'status')
